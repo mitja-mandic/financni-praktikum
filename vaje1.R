@@ -22,4 +22,18 @@ title("EURIBOR")
 #1. julij 2015, 3. oktober 2016, 1. september 2017
 
 druga.b <- euribor[c("01/07/2015", "03/10/2016", "01/09/2017"),]
+#druga.b <- as.data.frame(t(druga.b))
+graf.druga.b <- plot(t(druga.b[1,]), ylim = c(-0.4, 0.4), col = c("red"),x=c(1/4,1/2,1,2,3,6,9,12), pch = 16, ylab = "%", xlab = "Časovna enota")
+points(t(druga.b[2,]), col = c("blue"),pch = 16,x=c(1/4,1/2,1,2,3,6,9,12))
+points(t(druga.b[3,]), col = c("black"),pch = 16,x=c(1/4,1/2,1,2,3,6,9,12))
+lines(t(druga.b[1,]),col = c("red"),pch = 16,x=c(1/4,1/2,1,2,3,6,9,12))
+lines(t(druga.b[2,]),col = c("blue"),pch = 16,x=c(1/4,1/2,1,2,3,6,9,12))
+lines(t(druga.b[3,]),col = c("black"),pch = 16,x=c(1/4,1/2,1,2,3,6,9,12))
+legend("topleft",bty="n",lty = c(1,1),col=c("red", "blue", "black"), legend=c("1. julij 2015", "3. oktober 2016", "1. september 2017"))
+title("Časovna struktura Euribor")
+
+
+#tretja naloga
+
+
 
