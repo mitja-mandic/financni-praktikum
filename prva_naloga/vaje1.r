@@ -34,6 +34,8 @@ title("Časovna struktura Euribor")
 
 
 #tretja naloga
+T <- 6
+U <- 12
 
-
+euribor.tretja <- euribor[,c("6m","12m")]
 
