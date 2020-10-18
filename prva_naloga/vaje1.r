@@ -1,10 +1,10 @@
 #prva naloga
 
-euribor.15 <- read.table("podatki/hist_EURIBOR_2015.csv", sep = ",", header = TRUE, row.names = 1, check.names = FALSE)
+euribor.15 <- read.table("prva_naloga/podatki/hist_EURIBOR_2015.csv", sep = ",", header = TRUE, row.names = 1, check.names = FALSE)
 euribor.15 <- as.data.frame(t(euribor.15[,c(1, 22, 42, 64, 84, 104, 126, 149, 170, 192, 214, 235)]))
-euribor.16 <- read.table("podatki/hist_EURIBOR_2016.csv", sep = ",", header = TRUE, row.names = 1, check.names = FALSE)
+euribor.16 <- read.table("prva_naloga/podatki/hist_EURIBOR_2016.csv", sep = ",", header = TRUE, row.names = 1, check.names = FALSE)
 euribor.16 <- as.data.frame(t(euribor.16[,c(1, 21, 42, 63, 84, 106, 128, 149, 172, 194, 215, 237)]))
-euribor.17 <- read.table("podatki/hist_EURIBOR_2017.csv", sep = ",", header = TRUE, row.names = 1, check.names = FALSE)
+euribor.17 <- read.table("prva_naloga/podatki/hist_EURIBOR_2017.csv", sep = ",", header = TRUE, row.names = 1, check.names = FALSE)
 euribor.17 <- as.data.frame(t(euribor.17[,c(1, 23, 43, 66, 84, 106, 128, 149, 172, 193, 215, 237)]))
 
 euribor <- rbind(euribor.15,euribor.16,euribor.17)
@@ -38,4 +38,14 @@ T <- 6
 U <- 12
 
 euribor.tretja <- euribor[,c("6m","12m")]
+euribor.tretja[,"terminska"] <- 2 * ((1 + euribor.tretja[,"12m"]/100)/(1 + 1/2 * euribor.tretja[,"6m"]/100) - 1)*100
+
+napoved <- euribor.tretja[,"terminska"]
+napoved[c(31,32,33,34,35,36)] <- 0
+napoved[c(seq(7,36))] <- napoved[c(seq(1,30))]
+
+
+napoved[c(1,2,3,4,5,6)] <- NA
+euribor.tretja["napoved"] <- napoved
+
 
