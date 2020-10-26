@@ -1,3 +1,7 @@
+# OBRESTNE KRIVULJE
+# Finančni praktikum 2020/21
+# Mitja Mandić
+
 #prva naloga
 
 euribor.15 <- read.table("prva_naloga/podatki/hist_EURIBOR_2015.csv", sep = ",", header = TRUE, row.names = 1, check.names = FALSE)
@@ -30,7 +34,11 @@ lines(t(druga.b[1,]),col = c("red"),pch = 16,x=c(1/4,1/2,1,2,3,6,9,12))
 lines(t(druga.b[2,]),col = c("blue"),pch = 16,x=c(1/4,1/2,1,2,3,6,9,12))
 lines(t(druga.b[3,]),col = c("black"),pch = 16,x=c(1/4,1/2,1,2,3,6,9,12))
 legend("topleft",bty="n",lty = c(1,1),col=c("red", "blue", "black"), legend=c("1. julij 2015", "3. oktober 2016", "1. september 2017"))
-title("Časovna struktura Euribor")
+title("Casovna struktura Euribor")
+
+#Vse krivulje so naraščajoče, torej imajo višjo donosnost pri kasnejših datumih zapadlosti, torej imajo normalno obliko.
+#So precej položne in z izjemo leta 2015 skozi negativne.
+
 
 
 #tretja naloga
@@ -44,8 +52,35 @@ napoved <- euribor.tretja[,"terminska"]
 napoved[c(31,32,33,34,35,36)] <- 0
 napoved[c(seq(7,36))] <- napoved[c(seq(1,30))]
 
-
 napoved[c(1,2,3,4,5,6)] <- NA
 euribor.tretja["napoved"] <- napoved
 
+graf.3c <- plot(x=euribor.tretja[seq(6,12),"napoved"],y=euribor.tretja[seq(6,12),"6m"], xlim = c(-0.3,0.5), ylim = c(-0.3,0.5), type="p",
+                xlab = "napoved", ylab = "opazovano",col = "blue")
+points(x=euribor.tretja[seq(13,24),"napoved"],y=euribor.tretja[seq(13,24),"6m"], col = "red")
+points(x=euribor.tretja[seq(25,36),"napoved"],y=euribor.tretja[seq(25,36),"6m"], col = "green")
+lines(x = c(-0.5,0,5), y = c(-0.5,0,5), col = "grey")
+legend("topleft",bty="n",lty = c(1,1),col=c("blue", "red", "green"), legend=c("2015", "2016", "2017"))
+abline(lm(euribor.tretja[,"6m"]~euribor.tretja[,"napoved"]))
+title("6m euribor 2015-2017")       
 
+graf.3d.prva <- plot(x=euribor.tretja[seq(6,12),"napoved"],y=euribor.tretja[seq(6,12),"6m"], xlim = c(-0.1,0.5), ylim = c(-0.1,0.5), type="p",
+                     xlab = "napoved", ylab = "opazovano",col = "blue")
+abline(lm(euribor.tretja[seq(6,12),"6m"]~euribor.tretja[seq(6,12),"napoved"]))
+lines(x = c(-0.5,0,5), y = c(-0.5,0,5), col = "grey")
+title("6m Euribor 2015")
+
+graf.3d.druga <- plot(x=euribor.tretja[seq(13,24),"napoved"],y=euribor.tretja[seq(13,24),"6m"], xlim = c(-0.3,0.3), ylim = c(-0.3,0.3), type="p",
+                                     xlab = "napoved", ylab = "opazovano",col = "red")
+abline(lm(euribor.tretja[seq(13,24),"6m"]~euribor.tretja[seq(13,24),"napoved"]))
+lines(x = c(-0.5,0,5), y = c(-0.5,0,5), col = "grey")
+title("6m Euribor 2016")
+
+graf.3d.tretja <- plot(x=euribor.tretja[seq(25,36),"napoved"],y=euribor.tretja[seq(25,36),"6m"], xlim = c(-0.3,0.1), ylim = c(-0.3,0.1), type="p",
+                       xlab = "napoved", ylab = "opazovano",col = "green")
+abline(lm(euribor.tretja[seq(25,36),"6m"]~euribor.tretja[seq(25,36),"napoved"]))
+lines(x = c(-0.5,0,5), y = c(-0.5,0,5), col = "grey")
+title("6m Euribor 2017")
+
+#odgovor 3.e
+#Regresijska premica bi morala biti simetrala lihih kvadrantov, na kateri bi ležale vse narisane točke. Ker je napoved večj
