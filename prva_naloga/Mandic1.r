@@ -83,4 +83,5 @@ lines(x = c(-0.5,0,5), y = c(-0.5,0,5), col = "grey")
 title("6m Euribor 2017")
 
 #odgovor 3.e
-#Regresijska premica bi morala biti simetrala lihih kvadrantov, na kateri bi ležale vse narisane točke. Ker je napoved večj
+#Regresijska premica bi morala biti simetrala lihih kvadrantov, na kateri bi ležale vse narisane točke. Ker je napoved večja od
+#izmerjene vrednosti, so točke na grafih v desnem spodnjem kotu.
