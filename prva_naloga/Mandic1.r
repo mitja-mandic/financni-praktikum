@@ -85,3 +85,5 @@ title("6m Euribor 2017")
 #odgovor 3.e
 #Regresijska premica bi morala biti simetrala lihih kvadrantov, na kateri bi ležale vse narisane točke. Ker je napoved večja od
 #izmerjene vrednosti, so točke na grafih v desnem spodnjem kotu.
+
+#link na github repo: https://github.com/mitja-mandic/financni-praktikum
