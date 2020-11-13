@@ -18,15 +18,16 @@ izplacilo <- function(vrsta, T, type){
 binomski <- function(S0, u, d, U, R, T, type){
   
   poti <- hcube(rep(2,U), translation = -1) * u
-  poti[poti <= 0] <- d
+  poti[poti < 1] <- d
   #poti <- cbind(1, poti)
   #print(poti)
   
   q = (1 + R - d)/(u - d)
   
-  verjetnosti <- hcube(rep(2,U), translation = -1) * q
+  verjetnosti <- poti
+  verjetnosti[verjetnosti == u] <- q
   
-  verjetnosti[verjetnosti <= 0] <- 1-q
+  verjetnosti[verjetnosti == q] <- 1-q
   
   verjetnosti <- cbind(1,verjetnosti)
   verjetnosti <- t(apply(verjetnosti,1,cumprod))
@@ -59,6 +60,7 @@ binomski <- function(S0, u, d, U, R, T, type){
     
     premija  <- sum(pricakovana.izplacila) * diskontni.faktor
   } 
+  print(verjetnosti)
   return(premija)
 }
 
