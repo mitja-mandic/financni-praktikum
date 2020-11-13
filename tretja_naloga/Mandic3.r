@@ -61,3 +61,33 @@ binomski <- function(S0, u, d, U, R, T, type){
   } 
   return(premija)
 }
+
+
+#druga b
+
+monte <- function(S0,u,d,U,R,T,type,N){
+  #q = (1+R-d)/(u-d)
+  diskontni.faktor <- 1/(1+R)^U
+  izplacila <- rep(0,N)
+  
+  for (i in 1:N){
+    vzorec = sample(c(0,1), U, replace = TRUE)
+    
+    pot <- vzorec * u
+    pot[pot <= 0] <- d
+    
+    #print(pot)
+    cenovni.proces <- append(S0, pot)
+    
+    cenovni.proces <- cumprod(cenovni.proces)
+    
+    
+    #pricakovano.izplacilo <-  #* verjetnosti[length(verjetnosti)]
+
+    izplacila[i] <- izplacilo(cenovni.proces,T,type)
+    
+  }
+
+  premija <- sum(izplacila) * diskontni.faktor * 1/N
+  return(premija)
+}
