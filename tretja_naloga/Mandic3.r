@@ -19,6 +19,7 @@ binomski <- function(S0, u, d, U, R, T, type){
   
   poti <- hcube(rep(2,U), translation = -1) * u
   poti[poti < 1] <- d
+  #print(poti)
   #poti <- cbind(1, poti)
   #print(poti)
   
@@ -27,8 +28,8 @@ binomski <- function(S0, u, d, U, R, T, type){
   verjetnosti <- poti
   verjetnosti[verjetnosti == u] <- q
   
-  verjetnosti[verjetnosti == q] <- 1-q
-  
+  #print(verjetnosti)
+  verjetnosti[verjetnosti == d] <- 1-q
   verjetnosti <- cbind(1,verjetnosti)
   verjetnosti <- t(apply(verjetnosti,1,cumprod))
   
@@ -41,26 +42,17 @@ binomski <- function(S0, u, d, U, R, T, type){
   
   izplacila <- rep(0,length(cenovni.procesi[,1]))
   
-  if(type == "call"){
-    for(i in 1:length(cenovni.procesi[,1])){
-      izplacila[i] <- izplacilo(cenovni.procesi[i,],T,"call")
+
+  for(i in 1:length(cenovni.procesi[,1])){
+      izplacila[i] <- izplacilo(cenovni.procesi[i,],T,type)
     }
     
-    pricakovana.izplacila <- izplacila * verjetnosti[,U+1]
-    
-    premija <- sum(pricakovana.izplacila) * diskontni.faktor
-}
+  pricakovana.izplacila <- izplacila * verjetnosti[,U+1]
   
-  if(type == "put"){
-    for(i in 1:length(cenovni.procesi[,1])){
-      izplacila[i] <- izplacilo(cenovni.procesi[i,],T,"put")
-    }
+  premija  <- sum(pricakovana.izplacila) * diskontni.faktor
     
-    pricakovana.izplacila <- izplacila * verjetnosti[,U+1]
     
-    premija  <- sum(pricakovana.izplacila) * diskontni.faktor
-  } 
-  print(verjetnosti)
+  #print(verjetnosti)
   return(premija)
 }
 
@@ -74,22 +66,26 @@ monte <- function(S0,u,d,U,R,T,type,N){
   
   for (i in 1:N){
     vzorec = sample(c(0,1), U, replace = TRUE)
-    
+    #print(vzorec)
     pot <- vzorec * u
-    pot[pot <= 0] <- d
+    pot[pot < 1] <- d
     
+    #verjetnosti <- pot
+    #verjetnosti[verjetnosti == u] <- q
+    #verjetnosti[verjetnosti == d] <- 1 - q
+    #verjetnosti <- cumprod(verjetnosti)
     #print(pot)
-    cenovni.proces <- append(S0, pot)
+    #print(pot)
+    #cenovni.proces <- append(S0, pot)
     
-    cenovni.proces <- cumprod(cenovni.proces)
-    
-    
-    #pricakovano.izplacilo <-  #* verjetnosti[length(verjetnosti)]
+    cenovni.proces <- cumprod(append(S0, pot))
+    print(cenovni.proces)
 
-    izplacila[i] <- izplacilo(cenovni.proces,T,type)
+    izplacila[i] <- izplacilo(cenovni.proces,T,type) #* verjetnosti[length(verjetnosti)]
     
   }
-
-  premija <- sum(izplacila) * diskontni.faktor * 1/N
+  pricakovana.izplacila <- sum(izplacila) / N
+  premija <- pricakovana.izplacila * diskontni.faktor
   return(premija)
 }
+
