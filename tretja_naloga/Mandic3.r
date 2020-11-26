@@ -1,3 +1,10 @@
+# VREDNOTENJE EKSOTIČNIH OPCIJ
+# Finančni praktikum 2020/21
+# Mitja Mandić
+
+
+
+
 library(combinat)
 library(Rlab)
 
@@ -106,7 +113,11 @@ monte <- function(S0,u,d,U,R,T,type,N){
 
 #TRETJA NALOGA
 
+#Vrednostenje opcije po binomskem modelu
+
 po.modelu <- binomski(60,1.05,0.95,15,0.01,8,"put")
+
+#ponavljanje Monte carlo vrednotenj
 
 desetkrat <- rep(0,100)
 stokrat <- rep(0,100)
@@ -116,10 +127,12 @@ for (i in 1:100) {
   stokrat[i] <- monte(60,1.05,0.95,15,0.01,8,"put",100)
   tisockrat[i] <- monte(60,1.05,0.95,15,0.01,8,"put",1000)
 }
-simulirane <- cbind(desetkrat, stokrat, tisockrat)
 
+
+#Histogram desetkratne Monte carlo metode
 var.desetkrat <- var(desetkrat)
 povp.desetkrat <- mean(desetkrat)
+
 
 hist(desetkrat,freq = 10, xlim = c(0,10), main = paste("Monte Carlo: N = 10"), col = "pink")
 abline(v = povp.desetkrat,col = "blue",lwd=2)
@@ -128,7 +141,7 @@ arrows(x0=povp.desetkrat, y0=0, x1 = povp.desetkrat + var.desetkrat, col="blue",
 arrows(x0=povp.desetkrat, y0=0, x1=povp.desetkrat - var.desetkrat, col="blue", length=0.1, lwd = 2)
 legend("topright", legend=c("Monte Carlo", "analiza modela"), col=c("blue","green"), lty=c("solid","dashed"), cex=0.9)
 
-
+#Histogram 100-kratne
 var.stokrat <- var(stokrat)
 povp.stokrat <- mean(stokrat)
 
@@ -140,6 +153,7 @@ arrows(x0=povp.stokrat, y0=0, x1 = povp.stokrat + var.stokrat, col="blue", lengt
 arrows(x0=povp.stokrat, y0=0, x1=povp.stokrat - var.stokrat, col="blue", length=0.1, lwd = 2)
 legend("topright", legend=c("Monte Carlo", "analiza modela"), col=c("blue","green"), lty=c("solid","dashed"), cex=0.9)
 
+#Histogram 1000 kratne
 
 var.tisockrat <- var(tisockrat)
 povp.tisockrat <- mean(tisockrat)
