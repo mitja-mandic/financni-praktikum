@@ -27,9 +27,8 @@ binomski <- function(S0, u, d, U, R, T, type){
   
   verjetnosti <- poti
   verjetnosti[verjetnosti == u] <- q
-  
-  #print(verjetnosti)
   verjetnosti[verjetnosti == d] <- 1-q
+  
   verjetnosti <- cbind(1,verjetnosti)
   verjetnosti <- t(apply(verjetnosti,1,cumprod))
   
@@ -60,32 +59,81 @@ binomski <- function(S0, u, d, U, R, T, type){
 #druga b
 
 monte <- function(S0,u,d,U,R,T,type,N){
-  #q = (1+R-d)/(u-d)
+
+  q = (1+R-d)/(u-d)
+
   diskontni.faktor <- 1/(1+R)^U
+  
   izplacila <- rep(0,N)
   
   for (i in 1:N){
-    vzorec = sample(c(0,1), U, replace = TRUE)
-    #print(vzorec)
-    pot <- vzorec * u
-    pot[pot < 1] <- d
     
-    #verjetnosti <- pot
+    vzorec <- sample(c(u,d), (U-1), replace = TRUE, prob = c(q,1-q))
+    
+    #print(pot)
+    
+    #verjetnosti <- vzorec
+    
     #verjetnosti[verjetnosti == u] <- q
-    #verjetnosti[verjetnosti == d] <- 1 - q
-    #verjetnosti <- cumprod(verjetnosti)
-    #print(pot)
-    #print(pot)
-    #cenovni.proces <- append(S0, pot)
     
-    cenovni.proces <- cumprod(append(S0, pot))
-    print(cenovni.proces)
+    #verjetnosti[verjetnosti == d] <- 1 - q
+    #print(verjetnosti)
+    #verjetnost <- prod(verjetnosti)
+    
+    #print(verjetnost)
+    
+    cenovni.proces <- cumprod(append(S0, vzorec))
+    #print(cenovni.proces)
 
-    izplacila[i] <- izplacilo(cenovni.proces,T,type) #* verjetnosti[length(verjetnosti)]
+    izplacila[i] <- izplacilo(cenovni.proces,T,type) #* verjetnost
     
   }
-  pricakovana.izplacila <- sum(izplacila) / N
-  premija <- pricakovana.izplacila * diskontni.faktor
+  
+  #povp <- mean(izplacila)
+  
+  povp1 <- 1/N
+  
+  pricakovana.izplacila <- sum(izplacila)
+  
+  premija <- sum(izplacila) * povp1 * diskontni.faktor
+  
   return(premija)
 }
+
+
+#TRETJA NALOGA
+
+po.modelu <- binomski(60,1.05,0.95,15,0.01,8,"put")
+
+desetkrat <- rep(0,100)
+stokrat <- rep(0,100)
+tisockrat <- rep(0,100)
+for (i in 1:100) {
+  desetkrat[i] <- monte(60,1.05,0.95,15,0.01,8,"put",10)
+  stokrat[i] <- monte(60,1.05,0.95,15,0.01,8,"put",100)
+  tisockrat[i] <- monte(60,1.05,0.95,15,0.01,8,"put",1000)
+}
+simulirane <- cbind(desetkrat, stokrat, tisockrat)
+
+#abline(b = mean(desetkrat), add = TRUE)
+hist(desetkrat,freq = 10, xlim = c(0,10), main = paste("Monte Carlo: N = 10"), col = "pink")
+abline(v = mean(desetkrat),col = "blue")
+abline(v = po.modelu, col = "green")
+
+
+#lines(x = mean(desetkrat))
+
+hist(stokrat,freq = 10, xlim = c(0,10),main = paste("Monte Carlo: N = 100"), col ="pink")
+abline(v = mean(stokrat), col = "blue")
+abline(v = po.modelu, col = "green")
+
+hist(tisockrat,freq = 10, xlim = c(0,10),main = paste("Monte Carlo: N = 1000"), col = "pink")
+abline(v = mean(tisockrat), col = "blue")
+abline(v = po.modelu, col = "green")
+
+
+
+
+
+
 
