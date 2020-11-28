@@ -117,7 +117,7 @@ monte <- function(S0,u,d,U,R,T,type,N){
 
 po.modelu <- binomski(60,1.05,0.95,15,0.01,8,"put")
 
-#ponavljanje Monte carlo vrednotenj
+#ponavljanje Monte carlo simulacij
 
 desetkrat <- rep(0,100)
 stokrat <- rep(0,100)
